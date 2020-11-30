@@ -1,8 +1,9 @@
 class TasksController < ApplicationController
-  before_action :require_user_logged_in
+  before_action :require_user_logged_in ,only: [:index, :show]
+  before_action :correct_user ,only: [:index, :show , :new]
   
   def index
-    @tasks = Task.all
+    @tasks = current_user.tasks
   end
 
   def show
@@ -10,7 +11,7 @@ class TasksController < ApplicationController
   end
 
   def new
-    @tasks = Task.new 
+    @tasks = Task.new
   end
 
   def create
@@ -52,6 +53,10 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:content, :status)
+    params.require(:task).permit(:content, :status ,:user_id)
+  end
+  
+  def correct_user
+    @tasks = current_user.tasks.find_by(id: params[:id])
   end
 end
