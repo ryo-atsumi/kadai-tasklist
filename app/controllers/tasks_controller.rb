@@ -14,10 +14,10 @@ class TasksController < ApplicationController
   end
 
   def create
-    @tasks = current_user.tasks.build(task_params)
-    if @tasks.save
+    @task = current_user.tasks.build(task_params)
+    if @task.save
       flash[:success] = 'タスクの作成に成功しました'
-      redirect_to @tasks
+      redirect_to @task
     else
       flash.now[:danger] = 'タスクの作成に失敗しました'
       render :new
@@ -29,9 +29,9 @@ class TasksController < ApplicationController
 
   def update
 
-    if @tasks.update(task_params)
+    if @task.update(task_params)
       flash[:success] = 'タスクは正常に更新されました'
-      redirect_to @tasks
+      redirect_to @task
     else
       flash.now[:danger] = 'タスクは更新されませんでした'
       render :edit
@@ -39,7 +39,7 @@ class TasksController < ApplicationController
   end
 
   def destroy
-    @tasks.destroy
+    @task.destroy
 
     flash[:success] = 'タスクは正常に削除されました'
     redirect_to tasks_url
@@ -52,8 +52,8 @@ class TasksController < ApplicationController
   end
   
   def correct_user
-    @tasks = current_user.tasks.find_by(id: params[:id])
-    unless @tasks
+    @task = current_user.tasks.find_by(id: params[:id])
+    unless @task
       redirect_to root_url
     end
   end
